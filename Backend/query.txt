@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS `todos` ( todoId varchar(50) NOT NULL, userId varchar(50) NOT NULL, todoTitle varchar(255) NOT NULL, todoStatus varchar(10) NOT NULL,deleted Boolean DEFAULT false,createdAt timestamp DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY(userId) REFERENCES userStatic(userId) )
+
+CREATE TABLE IF NOT EXISTS `userStatic` ( userId varchar(50) NOT NULL PRIMARY KEY, email varchar(255) NOT NULL, name varchar(255) NOT NULL, active Boolean DEFAULT false, createdAt timestamp DEFAULT CURRENT_TIMESTAMP )
+
+CREATE TABLE IF NOT EXISTS `userStatic` ( userId varchar(50) NOT NULL, password varchar(255) NOT NULL, mobile int(10), FOREIGN KEY(userId) REFERENCES userStatic(userId) )
