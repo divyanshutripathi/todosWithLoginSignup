@@ -4,38 +4,61 @@ import Signup from "./components/signup";
 import Navigation from "./components/Navigation/Navigation";
 import TodoForm from "./components/todoForm";
 import TodoList from "./components/todoList";
+import axios from "axios";
 
 import "./App.css";
 
 class App extends Component {
   constructor() {
     super();
-    let myTasks = [
-      { text: "todo1", status: "passive" },
-      { text: "todo2 ", status: "active" },
-      { text: "todo3", status: "passive" },
-    ];
-    let localTasks = localStorage.getItem("tasks");
-    if (localTasks !== null) {
-      localTasks = JSON.parse(localTasks);
-      myTasks = localTasks;
-    }
     this.state = {
-      route: "signin",
+      route: "login",
       isSignedIn: false,
       user: {
         email: "",
       },
-      tasks: myTasks,
+      tasks: [],
     };
   }
 
+  loadTodo = () => {
+    const user = {
+      email: this.state.user.email,
+    };
+    axios
+      .post("http://localhost:5000/todo/getTodos", { user })
+      .then((response) => {
+        const { data, status } = response;
+        if (data.success && status / 100 === 2) {
+          this.setState({ tasks: data.msg });
+        }
+        if (!status / 100 === 2) {
+          alert("check the console");
+          console.log(data.msg);
+          this.setState({ tasks: [] });
+        }
+      })
+      .catch((err) => {
+        console.log("error : ", err);
+        alert("check the console");
+        console.log(err);
+        this.setState({ tasks: [] });
+      });
+  };
+
   loadUser = (data) => {
+    console.log("email : ", data);
     this.setState({
       user: {
-        email: data.email,
+        email: data,
       },
     });
+    this.loadTodo();
+    console.log("inside loadUser state : ", this.state);
+    localStorage.setItem(
+      "login",
+      JSON.stringify({ email: data, isSignedIn: true })
+    );
   };
 
   onRouteChange = (route) => {
@@ -55,23 +78,65 @@ class App extends Component {
     this.updateLocalStorage(updatedList);
   };
 
-  removeTask = async (task_id) => {
-    let updatedList = this.state.tasks;
-    updatedList.splice(task_id.replace("task_", ""), 1);
-    this.setState({ tasks: updatedList });
-    this.updateLocalStorage(updatedList);
+  removeTask = async (todoId) => {
+    console.log("todoId : ", todoId);
+    const user = {
+      todoId,
+      email: this.state.user.email,
+      deleted: true,
+    };
+    axios
+      .post("http://localhost:5000/todo/deleteTodo", { user })
+      .then((response) => {
+        const { data, status } = response;
+        if (data.success && status / 100 === 2) {
+          this.loadTodo();
+        }
+        if (!status / 100 === 2) {
+          alert("check the console");
+          console.log(data.msg);
+        }
+      })
+      .catch((err) => {
+        console.log("error : ", err);
+        alert("check the console");
+        console.log(err);
+      });
   };
 
-  doneTask = async (task_id) => {
-    let updatedList = this.state.tasks;
-    let currentStatus = updatedList[task_id.replace("task_", "")].status;
-    let newStatus = "active";
-    if (currentStatus === "active") {
-      newStatus = "passive";
-    }
-    updatedList[task_id.replace("task_", "")].status = newStatus;
-    this.setState({ tasks: updatedList });
-    this.updateLocalStorage(updatedList);
+  doneTask = async (todoId) => {
+    console.log("todoId : ", todoId);
+
+    let newStatus;
+    this.state.tasks.map((todo) => {
+      if (todo.todoId === todoId) {
+        newStatus = todo.todoStatus === "active" ? "passive" : "active";
+      }
+    });
+    console.log("todoStatus : ", newStatus);
+    const user = {
+      todoId,
+      email: this.state.user.email,
+      status: newStatus,
+    };
+    axios
+      .post("http://localhost:5000/todo/updateTodo", { user })
+      .then((response) => {
+        const { data, status } = response;
+        if (data.success && status / 100 === 2) {
+          console.log("response : ", data);
+          this.loadTodo();
+        }
+        if (!status / 100 === 2) {
+          alert("check the console");
+          console.log(data.msg);
+        }
+      })
+      .catch((err) => {
+        console.log("error : ", err);
+        alert("check the console");
+        console.log(err);
+      });
   };
 
   updateLocalStorage = (updatedList) => {
@@ -82,7 +147,6 @@ class App extends Component {
 
   render() {
     const { isSignedIn, route } = this.state;
-    console.log("state : ", this.state);
     return (
       <div className="App">
         <Navigation

@@ -1,5 +1,5 @@
 var express = require("express");
-const { v4: uuidv4 } = require("uuid");
+const shortid = require("shortid");
 var router = express.Router();
 const USER_STATIC = require("../models/userStaticModel");
 const TODO = require("../models/todoModel");
@@ -20,7 +20,7 @@ router.post("/addTodo", async (req, res) => {
             msg: "user does not exist",
           });
         } else {
-          const todoId = uuidv4(6);
+          const todoId = shortid.generate();
           todoDetails = {
             userId: existingEmail.userId,
             todoId,

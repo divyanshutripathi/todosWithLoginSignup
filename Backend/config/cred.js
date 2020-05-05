@@ -1,6 +1,6 @@
 module.exports = {
-  DATABASE: "********",
+  DATABASE: "*",
   HOST: "remotemysql.com",
-  USER: "********",
-  PASSWORD: "********",
+  USER: "*",
+  PASSWORD: "*",
 };

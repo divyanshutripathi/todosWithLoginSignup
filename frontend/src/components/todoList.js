@@ -12,6 +12,7 @@ export default class TodoList extends Component {
    * @param e
    */
   remove = (e) => {
+    console.log(e.target.parentNode.id);
     this.props.removeTask(e.target.parentNode.id);
   };
 
@@ -44,30 +45,31 @@ export default class TodoList extends Component {
       background: "#f4f4f4",
       padding: "10px",
       borderBottom: "1px #ccc dotted",
-      textDecoration: status === "active" ? "line-through" : "none",
+      textDecoration: status === "passive" ? "line-through" : "none",
     };
   };
 
   render() {
     let items_left = 0;
     const items = this.props.myList.map((elem, i) => {
+      console.log("map : ", elem);
       let task_id = "task_" + i;
       if (
         this.state.activeList === "All" ||
-        (this.state.activeList === "Active" && elem.status === "passive") ||
-        (this.state.activeList === "Completed" && elem.status === "active")
+        (this.state.activeList === "Active" && elem.todoStatus === "active") ||
+        (this.state.activeList === "Completed" && elem.todoStatus === "passive")
       ) {
-        if (elem.status === "passive") {
+        if (elem.todoStatus === "active") {
           items_left++;
         }
         return (
-          <div style={this.getStyle(elem.status)}>
-            <li key={i} id={task_id} className={elem.status}>
+          <div style={this.getStyle(elem.todoStatus)}>
+            <li key={i} id={elem.todoId} className={elem.todoStatus}>
               {/* <span className="id">{i + 1}</span> */}
-              <span className="title">{elem.text}</span>
+              <span className="title">{elem.todoTitle}</span>
               <input
                 type="checkbox"
-                defaultChecked={elem.status === "active" ? true : false}
+                defaultChecked={elem.todoStatus === "passive" ? true : false}
                 onChange={this.done}
               />
               <button onClick={this.remove} style={btnStyle}>

@@ -37,13 +37,15 @@ class Login extends Component {
         }
         if (!status / 100 === 2) {
           alert("login failed");
+          this.setState({ email: "" });
+          this.setState({ password: "" });
         }
-        this.setState({ email: "" });
-        this.setState({ password: "" });
       })
       .catch((err) => {
         console.log("error : ", err);
         alert("login failed");
+        this.setState({ email: "" });
+        this.setState({ password: "" });
       });
   };
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
