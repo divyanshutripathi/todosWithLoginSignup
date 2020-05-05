@@ -149,12 +149,6 @@ class App extends Component {
       });
   };
 
-  updateLocalStorage = (updatedList) => {
-    var updatedList = JSON.stringify(updatedList);
-    localStorage.setItem("tasks", updatedList);
-    return true;
-  };
-
   render() {
     const { isSignedIn, route } = this.state;
     return (
