@@ -12,7 +12,6 @@ export default class TodoList extends Component {
    * @param e
    */
   remove = (e) => {
-    console.log(e.target.parentNode.id);
     this.props.removeTask(e.target.parentNode.id);
   };
 
@@ -52,7 +51,6 @@ export default class TodoList extends Component {
   render() {
     let items_left = 0;
     const items = this.props.myList.map((elem, i) => {
-      console.log("map : ", elem);
       let task_id = "task_" + i;
       if (
         this.state.activeList === "All" ||

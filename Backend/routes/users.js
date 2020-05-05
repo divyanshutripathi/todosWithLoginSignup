@@ -17,7 +17,6 @@ router.post("/addUser", async (req, res) => {
   } else {
     try {
       USER_STATIC.getbyEmail(req.body.user.email, (err, existingEmail) => {
-        console.log("existingEmail : ", existingEmail);
         if (existingEmail) {
           res.json({
             success: false,
@@ -56,7 +55,6 @@ router.post("/addUser", async (req, res) => {
           });
         }
       });
-      // console.log("existingEmail : ", existingEmail);
     } catch (err) {
       console.log("error : ", err);
       res.json({

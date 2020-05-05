@@ -10,7 +10,7 @@ const Navigation = ({ onRouteChange, isSignedIn }) => {
   } else {
     return (
       <nav style={{ display: "flex", justifyContent: "flex-end" }}>
-        <p onClick={() => onRouteChange("login")}>Sign In</p>
+        <p onClick={() => onRouteChange("login")}>Sign In </p>
         <p onClick={() => onRouteChange("register")}>SignUp</p>
       </nav>
     );

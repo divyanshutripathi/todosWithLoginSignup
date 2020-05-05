@@ -13,7 +13,6 @@ router.post("/addTodo", async (req, res) => {
   } else {
     try {
       USER_STATIC.getbyEmail(req.body.user.email, (err, existingEmail) => {
-        console.log("existingEmail : ", existingEmail);
         if (!existingEmail) {
           res.json({
             success: false,
@@ -41,7 +40,6 @@ router.post("/addTodo", async (req, res) => {
           });
         }
       });
-      // console.log("existingEmail : ", existingEmail);
     } catch (err) {
       console.log("error : ", err);
       res.json({
@@ -53,7 +51,6 @@ router.post("/addTodo", async (req, res) => {
 });
 
 router.post("/getTodos", (req, res) => {
-  console.log(req.body);
   if (!req.body.user.email) {
     res.json({
       success: false,

@@ -11,8 +11,6 @@ module.exports.addUser = async function (user, result) {
       result(err);
       return;
     }
-
-    console.log("user inserted: ", res);
     result(null, res[0]);
   });
 };
@@ -28,8 +26,6 @@ module.exports.getbyEmail = async function (email) {
       console.log("error: ", err);
       return err;
     }
-
-    console.log("user: ", res);
     return res;
   });
 };

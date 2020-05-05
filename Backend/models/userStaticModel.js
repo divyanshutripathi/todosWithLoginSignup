@@ -14,7 +14,6 @@ module.exports.addUser = async function (user, result) {
       return;
     }
 
-    console.log("user inserted: ", res);
     result(null, res[0]);
   });
 };
@@ -34,8 +33,6 @@ module.exports.getbyEmail = async function (email, result) {
         result(err);
         return;
       }
-
-      console.log("user: ", res);
       result(null, res[0]);
     }
   );

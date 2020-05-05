@@ -14,8 +14,6 @@ module.exports.addTodo = async function (todo, result) {
       result(err);
       return;
     }
-
-    console.log("todo inserted: ", res);
     result(null, res[0]);
   });
 };
@@ -31,8 +29,6 @@ module.exports.getTodoByUserId = async function (userId, result) {
       result(err);
       return;
     }
-
-    console.log("user: ", res);
     result(null, res);
   });
 };
@@ -48,8 +44,6 @@ module.exports.getTodoById = async function (todoId, result) {
       result(err);
       return;
     }
-
-    console.log("user: ", res);
     result(null, res);
   });
 };
@@ -62,8 +56,6 @@ module.exports.updateTodoById = async function (todoData, result) {
       result(err);
       return;
     }
-
-    console.log("updated todo: ", res);
     result(null, res[0]);
   });
 };
@@ -76,8 +68,6 @@ module.exports.deleteTodoById = async function (todoId, result) {
       result(err);
       return;
     }
-
-    console.log("updated todo: ", res);
     result(null, res[0]);
   });
 };

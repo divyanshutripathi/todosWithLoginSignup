@@ -47,14 +47,12 @@ class App extends Component {
   };
 
   loadUser = (data) => {
-    console.log("email : ", data);
     this.setState({
       user: {
         email: data,
       },
     });
     this.loadTodo();
-    console.log("inside loadUser state : ", this.state);
     localStorage.setItem(
       "login",
       JSON.stringify({ email: data, isSignedIn: true })
@@ -62,7 +60,6 @@ class App extends Component {
   };
 
   onRouteChange = (route) => {
-    console.log("onRouteChange : ", route);
     if (route === "signout") {
       this.setState({ isSignedIn: false });
     } else if (route === "todos") {
@@ -72,14 +69,31 @@ class App extends Component {
   };
 
   addTask = async (task) => {
-    let updatedList = this.state.tasks;
-    updatedList.push({ text: task, status: "passive" });
-    this.setState({ tasks: updatedList });
-    this.updateLocalStorage(updatedList);
+    const user = {
+      email: this.state.user.email,
+      title: task,
+      status: "active",
+    };
+    axios
+      .post("http://localhost:5000/todo/addTodo", { user })
+      .then((response) => {
+        const { data, status } = response;
+        if (data.success && status / 100 === 2) {
+          this.loadTodo();
+        }
+        if (!status / 100 === 2) {
+          alert("check the console");
+          console.log(data.msg);
+        }
+      })
+      .catch((err) => {
+        console.log("error : ", err);
+        alert("check the console");
+        console.log(err);
+      });
   };
 
   removeTask = async (todoId) => {
-    console.log("todoId : ", todoId);
     const user = {
       todoId,
       email: this.state.user.email,
@@ -105,15 +119,12 @@ class App extends Component {
   };
 
   doneTask = async (todoId) => {
-    console.log("todoId : ", todoId);
-
     let newStatus;
     this.state.tasks.map((todo) => {
       if (todo.todoId === todoId) {
         newStatus = todo.todoStatus === "active" ? "passive" : "active";
       }
     });
-    console.log("todoStatus : ", newStatus);
     const user = {
       todoId,
       email: this.state.user.email,
@@ -124,7 +135,6 @@ class App extends Component {
       .then((response) => {
         const { data, status } = response;
         if (data.success && status / 100 === 2) {
-          console.log("response : ", data);
           this.loadTodo();
         }
         if (!status / 100 === 2) {
