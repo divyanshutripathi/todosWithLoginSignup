@@ -1,14 +1,15 @@
 const express = require("express");
-const socketIo = require("socket.io");
-
+const bodyParser = require("body-parser");
 const cred = require("./config/cred");
 const cors = require("cors");
+require("dotenv").config();
 
 const mysql = require("mysql");
 
 const app = express();
 const usersRouter = require("./routes/users");
 const todoRouter = require("./routes/todo");
+app.use(bodyParser.json());
 app.use(
   express.json({
     extended: true,

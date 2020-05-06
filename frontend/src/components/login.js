@@ -32,6 +32,7 @@ class Login extends Component {
         const { data, status } = response;
         if (data.success && status / 100 === 2) {
           alert("login successfull");
+          sessionStorage.setItem("token", data.msg);
           this.props.loadUser(email);
           this.props.onRouteChange("todos");
         }

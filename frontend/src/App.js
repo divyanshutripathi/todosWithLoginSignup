@@ -22,7 +22,9 @@ class App extends Component {
   }
 
   loadTodo = () => {
+    const token = sessionStorage.getItem("token") || null;
     const user = {
+      token,
       email: this.state.user.email,
     };
     axios
@@ -69,7 +71,9 @@ class App extends Component {
   };
 
   addTask = async (task) => {
+    const token = sessionStorage.getItem("token") || null;
     const user = {
+      token,
       email: this.state.user.email,
       title: task,
       status: "active",
@@ -94,7 +98,9 @@ class App extends Component {
   };
 
   removeTask = async (todoId) => {
+    const token = sessionStorage.getItem("token") || null;
     const user = {
+      token,
       todoId,
       email: this.state.user.email,
       deleted: true,
@@ -125,7 +131,9 @@ class App extends Component {
         newStatus = todo.todoStatus === "active" ? "passive" : "active";
       }
     });
+    const token = sessionStorage.getItem("token") || null;
     const user = {
+      token,
       todoId,
       email: this.state.user.email,
       status: newStatus,

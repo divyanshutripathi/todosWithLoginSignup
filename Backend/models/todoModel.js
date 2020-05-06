@@ -35,7 +35,7 @@ module.exports.getTodoByUserId = async function (userId, result) {
 
 module.exports.getTodoById = async function (todoId, result) {
   query = `
-  SELECT todos.todoId
+  SELECT todos.todoId, todos.userId
   FROM todos
   WHERE  todos.todoId = ? AND ?? != ?`;
   sql.query(query, [todoId, "todos.deleted", true], (err, res) => {
@@ -44,7 +44,7 @@ module.exports.getTodoById = async function (todoId, result) {
       result(err);
       return;
     }
-    result(null, res);
+    result(null, res[0]);
   });
 };
 

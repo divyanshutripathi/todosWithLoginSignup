@@ -1,10 +1,13 @@
 var express = require("express");
+const jwt = require("jsonwebtoken");
+
 const { v4: uuidv4 } = require("uuid");
 var router = express.Router();
 const USER_STATIC = require("../models/userStaticModel");
 const USER_DYNAMIC = require("../models/userDynamicModel");
+const { authenticateJWT } = require("../authenticator/jwtAuthenticator");
 
-router.post("/addUser", async (req, res) => {
+router.post("/addUser", authenticateJWT, async (req, res) => {
   if (
     !req.body.user.username ||
     !req.body.user.email ||
@@ -86,9 +89,14 @@ router.post("/login", (req, res) => {
           });
         } else {
           if (resUser.password == req.body.user.password) {
+            const accessToken = jwt.sign(
+              { username: resUser.email },
+              process.env.SECRET_TOKEN
+            );
+
             res.json({
               success: true,
-              msg: "login successfull",
+              msg: accessToken,
             });
           } else {
             res.json({

@@ -1,10 +1,14 @@
 import React from "react";
 
 const Navigation = ({ onRouteChange, isSignedIn }) => {
+  const onSignout = () => {
+    sessionStorage.removeItem("token");
+    onRouteChange("signout");
+  };
   if (isSignedIn) {
     return (
       <nav style={{ display: "flex", justifyContent: "flex-end" }}>
-        <p onClick={() => onRouteChange("signout")}>Sign Out</p>
+        <p onClick={() => onSignout("signout")}>Sign Out</p>
       </nav>
     );
   } else {

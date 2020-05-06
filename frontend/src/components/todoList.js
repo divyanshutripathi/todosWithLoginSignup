@@ -51,7 +51,6 @@ export default class TodoList extends Component {
   render() {
     let items_left = 0;
     const items = this.props.myList.map((elem, i) => {
-      let task_id = "task_" + i;
       if (
         this.state.activeList === "All" ||
         (this.state.activeList === "Active" && elem.todoStatus === "active") ||

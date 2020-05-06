@@ -3,8 +3,9 @@ const shortid = require("shortid");
 var router = express.Router();
 const USER_STATIC = require("../models/userStaticModel");
 const TODO = require("../models/todoModel");
+const { authenticateJWT } = require("../authenticator/jwtAuthenticator");
 
-router.post("/addTodo", async (req, res) => {
+router.post("/addTodo", authenticateJWT, async (req, res) => {
   if (!req.body.user.title || !req.body.user.email || !req.body.user.status) {
     res.json({
       success: false,
@@ -50,7 +51,7 @@ router.post("/addTodo", async (req, res) => {
   }
 });
 
-router.post("/getTodos", (req, res) => {
+router.post("/getTodos", authenticateJWT, (req, res) => {
   if (!req.body.user.email) {
     res.json({
       success: false,
@@ -89,7 +90,7 @@ router.post("/getTodos", (req, res) => {
   }
 });
 
-router.post("/updateTodo", (req, res) => {
+router.post("/updateTodo", authenticateJWT, (req, res) => {
   if (!req.body.user.email || !req.body.user.todoId || !req.body.user.status) {
     res.json({
       success: false,
@@ -140,7 +141,7 @@ router.post("/updateTodo", (req, res) => {
   }
 });
 
-router.post("/deleteTodo", (req, res) => {
+router.post("/deleteTodo", authenticateJWT, (req, res) => {
   if (!req.body.user.email || !req.body.user.todoId || !req.body.user.deleted) {
     res.json({
       success: false,
@@ -160,8 +161,8 @@ router.post("/deleteTodo", (req, res) => {
             msg: "user does not exist",
           });
         } else {
-          TODO.getTodoById(req.body.user.todoId, (err, resUser) => {
-            if (resUser) {
+          TODO.getTodoById(req.body.user.todoId, (err, resTodo) => {
+            if (resTodo && resTodo.userId === resUser.userId) {
               TODO.deleteTodoById(req.body.user.todoId, (err) => {
                 if (err) {
                   res.json({
@@ -171,7 +172,7 @@ router.post("/deleteTodo", (req, res) => {
                 }
                 res.json({
                   success: true,
-                  msg: "todo updated successfully",
+                  msg: "todo deleted successfully",
                 });
               });
             } else {
